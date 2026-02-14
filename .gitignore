@@ -135,13 +135,6 @@ Thumbs.db
 *.sublime-workspace
 
 # Data and models
-data/
-raw_data/
-processed_data/
-*.csv
-*.xlsx
-*.xls
-*.json
 
 models/
 *.pkl

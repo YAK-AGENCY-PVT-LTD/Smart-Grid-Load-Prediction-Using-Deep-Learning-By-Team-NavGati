@@ -86,6 +86,12 @@ TABLE_SPECS = (
         drop_last_rows=8,
         drop_columns=(0, 7),
     ),
+    TableSpec(
+        name="region_wise_capacity",
+        page="12",
+        drop_last_rows=0,
+        drop_columns=(),
+    ),
 )
 
 
@@ -123,6 +129,18 @@ def month_folder_name(month_num: int, month_name: str) -> str:
 
 def clean_table(df: pd.DataFrame, spec: TableSpec) -> pd.DataFrame:
     df = df.copy()
+
+    if spec.name == "region_wise_capacity":
+        df = df.drop(index=0, errors="ignore")
+        if not df.empty:
+            df.columns = df.iloc[0].values
+        df = df.drop(index=[1, 2], errors="ignore")
+        if len(df.columns) >= 3:
+            df = df[[df.columns[2], df.columns[-2]]]
+        df.columns = ["Region", "Grand_Total"]
+        df = df.iloc[:-3]
+        return df
+
     df = df.drop(index=0)
     df.columns = df.iloc[0].values
     df = df.drop(index=1)
